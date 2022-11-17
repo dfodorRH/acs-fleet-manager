@@ -559,6 +559,7 @@ secrets/touch:
           secrets/central-tls.crt \
           secrets/central-tls.key \
           secrets/central.idp-client-secret \
+          secrets/central.segment.key \
           secrets/image-pull.dockerconfigjson \
           secrets/observability-config-access.token \
           secrets/ocm-service.clientId \
@@ -590,6 +591,11 @@ redhatsso/setup:
 # Setup for the Central's IdP integration
 centralidp/setup:
 	@echo -n "$(CENTRAL_IDP_CLIENT_SECRET)" > secrets/central.idp-client-secret
+.PHONY:centralidp/setup
+
+# Setup for the Central's Segment integration
+centralidp/setup:
+	@echo -n "$(CENTRAL_SEGMENT_KEY_SECRET)" > secrets/central.segment.key
 .PHONY:centralidp/setup
 
 # Setup for the central broker certificate
@@ -669,6 +675,7 @@ deploy/secrets:
 		-p SSO_CLIENT_ID="$(shell ([ -s './secrets/redhatsso-service.clientId' ] && [ -z '${SSO_CLIENT_ID}' ]) && cat ./secrets/redhatsso-service.clientId || echo '${SSO_CLIENT_ID}')" \
 		-p SSO_CLIENT_SECRET="$(shell ([ -s './secrets/redhatsso-service.clientSecret' ] && [ -z '${SSO_CLIENT_SECRET}' ]) && cat ./secrets/redhatsso-service.clientSecret || echo '${SSO_CLIENT_SECRET}')" \
 		-p CENTRAL_IDP_CLIENT_SECRET="$(shell ([ -s './secrets/central.idp-client-secret' ] && [ -z '${CENTRAL_IDP_CLIENT_SECRET}' ]) && cat ./secrets/central.idp-client-secret || echo '${CENTRAL_IDP_CLIENT_SECRET}')" \
+		-p CENTRAL_SEGMENT_KEY_SECRET="$(shell ([ -s './secrets/central.segment.key' ] && [ -z '${CENTRAL_SEGMENT_KEY_SECRET}' ]) && cat ./secrets/central.segment.key || echo '${CENTRAL_SEGMENT_KEY_SECRET}')" \
 		-p CENTRAL_TLS_CERT="$(shell ([ -s './secrets/central-tls.crt' ] && [ -z '${CENTRAL_TLS_CERT}' ]) && cat ./secrets/central-tls.crt || echo '${CENTRAL_TLS_CERT}')" \
 		-p CENTRAL_TLS_KEY="$(shell ([ -s './secrets/central-tls.key' ] && [ -z '${CENTRAL_TLS_KEY}' ]) && cat ./secrets/central-tls.key || echo '${CENTRAL_TLS_KEY}')" \
 		-p OBSERVABILITY_CONFIG_ACCESS_TOKEN="$(shell ([ -s './secrets/observability-config-access.token' ] && [ -z '${OBSERVABILITY_CONFIG_ACCESS_TOKEN}' ]) && cat ./secrets/observability-config-access.token || echo '${OBSERVABILITY_CONFIG_ACCESS_TOKEN}')" \

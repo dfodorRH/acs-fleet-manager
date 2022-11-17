@@ -32,6 +32,9 @@ type CentralConfig struct {
 	CentralIDPClientSecret     string `json:"central_idp_client_secret"`
 	CentralIDPClientSecretFile string `json:"central_idp_client_secret_file"`
 	CentralIDPIssuer           string `json:"central_idp_issuer"`
+
+	// Segment write key (optional).
+	CentralSegmentKeySecret string `json:"central_segment_key_secret"`
 }
 
 // NewCentralConfig ...
@@ -62,6 +65,8 @@ func (c *CentralConfig) AddFlags(fs *pflag.FlagSet) {
 	fs.StringVar(&c.CentralIDPClientID, "central-idp-client-id", c.CentralIDPClientID, "OIDC client_id to pass to Central's auth config")
 	fs.StringVar(&c.CentralIDPClientSecretFile, "central-idp-client-secret-file", c.CentralIDPClientSecretFile, "File containing OIDC client_secret to pass to Central's auth config")
 	fs.StringVar(&c.CentralIDPIssuer, "central-idp-issuer", c.CentralIDPIssuer, "OIDC issuer URL to pass to Central's auth config")
+
+	fs.StringVar(&c.CentralSegmentKeySecret, "central-segment-key", c.CentralSegmentKeySecret, "Segment write key to pass to Central for marketing telemetry data collection")
 }
 
 // ReadFiles ...

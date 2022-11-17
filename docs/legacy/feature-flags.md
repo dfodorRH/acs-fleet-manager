@@ -46,6 +46,9 @@ This lists the feature flags and their sub-configurations to enable/disable and 
     - **central-idp-issuer**: OIDC issuer URL to pass to Central's auth config to set up
       its IdP integration.
 
+- **central-segment-key**: Segment write key to pass marketing telemetry data.
+  If not set, no data will be sent to Segment.
+
 - **quota-type**: Sets the quota service to be used for access control when requesting Central instances (options: `ams` or `quota-management-list`, default: `quota-management-list`).
     > For more information on the quota service implementation, see the [quota service architecture](./architecture/quota-service-implementation) architecture documentation.
     - If this is set to `quota-management-list`, quotas will be managed via the quota management list configuration.
