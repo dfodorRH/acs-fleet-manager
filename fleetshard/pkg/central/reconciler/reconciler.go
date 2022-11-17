@@ -35,6 +35,9 @@ const (
 
 	revisionAnnotationKey = "rhacs.redhat.com/revision"
 
+	telemetryAPIPathAnnotationKey = "rhacs.redhat.com/telemetry-apipaths"
+	organizationIDAnnotationKey   = "rhacs.redhat.com/organization-id"
+
 	helmReleaseName = "tenant-resources"
 
 	managedServicesAnnotation = "platform.stackrox.io/managed-services"
@@ -107,10 +110,14 @@ func (r *CentralReconciler) Reconcile(ctx context.Context, remoteCentral private
 
 	central := &v1alpha1.Central{
 		ObjectMeta: metav1.ObjectMeta{
-			Name:        remoteCentralName,
-			Namespace:   remoteCentralNamespace,
-			Labels:      map[string]string{k8s.ManagedByLabelKey: k8s.ManagedByFleetshardValue},
-			Annotations: map[string]string{managedServicesAnnotation: "true"},
+			Name:      remoteCentralName,
+			Namespace: remoteCentralNamespace,
+			Labels:    map[string]string{k8s.ManagedByLabelKey: k8s.ManagedByFleetshardValue},
+			Annotations: map[string]string{
+				managedServicesAnnotation:     "true",
+				telemetryAPIPathAnnotationKey: "*",
+				organizationIDAnnotationKey:   r.central.Spec.Auth.OwnerOrgId,
+			},
 		},
 		Spec: v1alpha1.CentralSpec{
 			Central: &v1alpha1.CentralComponentSpec{
