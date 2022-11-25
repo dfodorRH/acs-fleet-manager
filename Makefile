@@ -116,6 +116,14 @@ GINKGO_BIN := $(LOCAL_BIN_PATH)/ginkgo
 $(GINKGO_BIN): $(TOOLS_DIR)/go.mod $(TOOLS_DIR)/go.sum
 	@cd $(TOOLS_DIR) && GOBIN=${LOCAL_BIN_PATH} $(GO) install github.com/onsi/ginkgo/v2/ginkgo
 
+TOOLS_VENV_DIR := $(LOCAL_BIN_PATH)/tools_venv
+$(TOOLS_VENV_DIR):
+	@set -e; \
+	python3 -m venv $(TOOLS_VENV_DIR); \
+	. $(TOOLS_VENV_DIR)/bin/activate; \
+	pip install --upgrade pip==22.3.1; \
+	pip install -r $(TOOLS_DIR)/requirements.txt
+
 OPENAPI_GENERATOR ?= ${LOCAL_BIN_PATH}/openapi-generator
 NPM ?= "$(shell which npm)"
 openapi-generator:
@@ -861,7 +869,7 @@ full-image-tag:
 
 release_date="$(shell date '+%Y-%m-%d')"
 release_commit="$(shell git rev-parse --short=7 HEAD)"
-tag_count="$(shell git tag -l $(release_date)* | wc -l)"
+tag_count="$(shell git tag -l $(release_date)* | wc -l | xargs)" # use xargs to remove unnecessary whitespace
 start_rev=1
 rev="$(shell expr $(tag_count) + $(start_rev))"
 release-version:

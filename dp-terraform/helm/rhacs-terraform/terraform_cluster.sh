@@ -16,7 +16,10 @@ fi
 ENVIRONMENT=$1
 CLUSTER_NAME=$2
 
-export AWS_PROFILE="$ENVIRONMENT"
+export AWS_AUTH_HELPER="${AWS_AUTH_HELPER:-aws-saml}"
+if [[ "$AWS_AUTH_HELPER" == "aws-vault" ]]; then
+    export AWS_PROFILE="$ENVIRONMENT"
+fi
 
 init_chamber
 
@@ -28,7 +31,7 @@ case $ENVIRONMENT in
   stage)
     FM_ENDPOINT="https://xtr6hh3mg6zc80v.api.stage.openshift.com"
 
-    FLEETSHARD_SYNC_IMAGE="quay.io/app-sre/acs-fleet-manager:3060ea1"
+    FLEETSHARD_SYNC_IMAGE="quay.io/app-sre/acs-fleet-manager:1cf5fce"
 
     OBSERVABILITY_GITHUB_TAG="master"
     OBSERVABILITY_OBSERVATORIUM_GATEWAY="https://observatorium-mst.api.stage.openshift.com"
@@ -37,7 +40,7 @@ case $ENVIRONMENT in
   prod)
     FM_ENDPOINT="https://api.openshift.com"
 
-    FLEETSHARD_SYNC_IMAGE="quay.io/app-sre/acs-fleet-manager:3060ea1"
+    FLEETSHARD_SYNC_IMAGE="quay.io/app-sre/acs-fleet-manager:1cf5fce"
 
     OBSERVABILITY_GITHUB_TAG="b864d5f155b5455bba78eb7b82bc4bf4190852c7"  # pragma: allowlist secret
     OBSERVABILITY_OBSERVATORIUM_GATEWAY="https://observatorium-mst.api.openshift.com"
